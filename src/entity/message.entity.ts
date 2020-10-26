@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
-export class CommentEntity extends BaseEntity{
+export class MessageEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -10,8 +10,5 @@ export class CommentEntity extends BaseEntity{
     description: string;
 
     @Column()
-    channel: string;
-
-    @Column()
-    userId: string;
+    userId: number;
 }

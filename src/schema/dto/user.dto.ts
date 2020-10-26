@@ -4,7 +4,6 @@ export class UserDto {
 
     login: string;
 
-    @IsEmail()
     email: string;
 
     password: string;

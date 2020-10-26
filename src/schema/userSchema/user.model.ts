@@ -12,7 +12,5 @@ export class User {
     @Field()
     email: string;
 
-    @Field({ nullable: true })
-    token: string;
 
 }

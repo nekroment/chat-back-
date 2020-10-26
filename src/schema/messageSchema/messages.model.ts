@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
-export class Comment {
+export class Message{
     
     @Field(type => ID)
     id: number;
@@ -10,8 +10,5 @@ export class Comment {
     description: string;
 
     @Field()
-    channel: string;
-
-    @Field()
-    userId: string;
+    userId: number;
 }

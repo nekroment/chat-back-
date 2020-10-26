@@ -2,23 +2,27 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Token {
+  token: String!
+}
+
 type User {
   id: ID!
   login: String!
   email: String!
-  token: String
+  token: Token!
 }
 
-type Comment {
+type Message {
   id: ID!
   description: String!
-  channel: String!
-  userId: String!
+  userId: Float!
+  user: User!
 }
 
 type Query {
+  getAllMessages: [Message!]!
   signIn(user: UserLogin!): User!
-  getAllComments: [Comment!]!
 }
 
 input UserLogin {
@@ -27,8 +31,12 @@ input UserLogin {
 }
 
 type Mutation {
+  createMessage(message: MessageInput!): Message!
   registration(user: UserInput!): User!
-  createComment: Comment!
+}
+
+input MessageInput {
+  description: String!
 }
 
 input UserInput {
