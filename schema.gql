@@ -1,0 +1,38 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  login: String!
+  email: String!
+  token: String
+}
+
+type Comment {
+  id: ID!
+  description: String!
+  channel: String!
+  userId: String!
+}
+
+type Query {
+  signIn(user: UserLogin!): User!
+  getAllComments: [Comment!]!
+}
+
+input UserLogin {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  registration(user: UserInput!): User!
+  createComment: Comment!
+}
+
+input UserInput {
+  login: String!
+  email: String!
+  password: String!
+}
