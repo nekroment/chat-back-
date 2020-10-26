@@ -1,4 +1,4 @@
-import { MessagesModule } from './comments/messages.module';
+import { MessagesModule } from './messages/messages.module';
 import { UserModule } from './user/user.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
