@@ -4,11 +4,8 @@ import { UserService } from './user.service';
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { User } from 'src/schema/userSchema/user.model';
 import { GraphQLError } from 'graphql';
-import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from './auth.guard';
 
 @Resolver()
-@UseGuards(AuthGuard)
 export class UserResolver {
   constructor(
     private userService: UserService
