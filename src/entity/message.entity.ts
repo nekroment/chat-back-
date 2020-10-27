@@ -11,4 +11,7 @@ export class MessageEntity extends BaseEntity{
 
     @Column()
     userId: number;
+
+    @Column({default: new Date()})
+    date: Date;
 }

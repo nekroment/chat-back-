@@ -13,7 +13,13 @@ import { GraphQLModule } from '@nestjs/graphql';
     MessagesModule,
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
-      context: (({req}) => ({headers: req.headers}))
+      context: (context) => {
+        // console.log('----------------------');
+        // console.log(context);
+        // console.log('++++++++++++++++++++++');
+        return {req: context.req, connection: context.connection}
+      },
+      installSubscriptionHandlers: true
     }),
   ],
   controllers: [AppController],

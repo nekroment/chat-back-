@@ -13,15 +13,28 @@ type User {
   token: Token!
 }
 
+type UserInfo {
+  id: ID!
+  login: String!
+  email: String!
+}
+
 type Message {
   id: ID!
   description: String!
   userId: Float!
-  user: User!
+  date: DateTime!
+  user: UserInfo!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Query {
   getAllMessages: [Message!]!
+  moreMesssages(take: Float!, skip: Float!): [Message!]!
   signIn(user: UserLogin!): User!
 }
 
@@ -43,4 +56,8 @@ input UserInput {
   login: String!
   email: String!
   password: String!
+}
+
+type Subscription {
+  messageAdded: Message!
 }
