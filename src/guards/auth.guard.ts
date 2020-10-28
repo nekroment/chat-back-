@@ -2,8 +2,8 @@ import { UserService } from './../modules/user/user.service';
 import { JwtDto } from '../schema/dto/jwt.payload';
 import { CanActivate, ExecutionContext, Injectable, Inject, UnauthorizedException } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import * as get from 'lodash.get';
-import * as set from 'lodash.set';
+import get from 'lodash.get';
+import set from 'lodash.set';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
