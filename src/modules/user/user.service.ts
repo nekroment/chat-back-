@@ -1,7 +1,6 @@
 import { User } from './../../schema/userSchema/user.model';
 import { UserInfo } from './../../schema/userSchema/user.info';
 import { UserEntity } from './../../entity/user.entity';
-import { JwtDto } from '../../schema/dto/jwt.payload';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -20,20 +19,33 @@ export class UserService {
   }
 
   async registration(login: string, email: string, password: string) {
-    const isUser = await this.userRepository.findOne({ email})
+
+    function getRandomColor() {
+      let letters = '0123456789ABCDEF';
+      let color = '';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    const isUser = await this.userRepository.findOne({ email })
     if (isUser) {
       return new GraphQLError('User with this email or login exist!');
     }
-    const isLoginExist = await this.userRepository.findOne({ login})
+    const isLoginExist = await this.userRepository.findOne({ login })
     if (isLoginExist) {
       return new GraphQLError('User with this email or login exist!');
     }
-
+    const colorBack = getRandomColor();
+    const colorText = getRandomColor();
+    const isAvatar = `https://via.placeholder.com/150/${colorBack}/${colorText}?text=${login[0]}`
     const hashedPassword = await bcrypt.hash(password, 0);
     const newUser = new UserEntity();
     newUser.email = email;
     newUser.login = login;
     newUser.password = hashedPassword;
+    newUser.avatar = isAvatar;
     await newUser.save();
     const userInfo: UserInfo = new UserInfo();
     userInfo.user = newUser;
@@ -62,6 +74,7 @@ export class UserService {
     signUser.id = isUser.id;
     signUser.login = isUser.login;
     signUser.email = isUser.email;
+    signUser.avatar = isUser.avatar;
     const userInfo: UserInfo = new UserInfo();
     userInfo.user = signUser;
     return userInfo;

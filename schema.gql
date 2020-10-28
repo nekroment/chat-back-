@@ -6,6 +6,7 @@ type User {
   id: ID!
   login: String!
   email: String!
+  avatar: String
 }
 
 type UserInfo {
@@ -38,5 +39,5 @@ type Mutation {
 }
 
 type Subscription {
-  messageAdded: Message!
+  messageAdded(date: DateTime!): [Message!]!
 }

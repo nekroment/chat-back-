@@ -5,7 +5,8 @@ import { MessagesService } from './messages.service';
 import { Resolver, Query, Mutation, Context, Args, ResolveField, Parent, Subscription } from "@nestjs/graphql";
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { PubSub } from "graphql-subscriptions";
+import { PubSub, } from "graphql-subscriptions";
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 const pubSub = new PubSub();
 
@@ -22,7 +23,7 @@ export class MessagesResolver {
 
     const user: UserEntity = context.req['user'];
     const newMessage = await this.messagesService.createMessage(description, user.id);
-    pubSub.publish('messageAdded', { messageAdded: newMessage });
+    pubSub.publish('messageAdded', { messageAdded: [newMessage] });
     return newMessage;
   }
 
@@ -36,9 +37,26 @@ export class MessagesResolver {
     return await this.messagesService.moreMessages(skip, take);
   }
 
-  @Subscription(() => Message)
-  messageAdded() {
-    return pubSub.asyncIterator('messageAdded');
+  @Subscription(() => [Message], {
+    filter: async (payload, variables) => {
+      if (payload.messageAdded.length > 1) {
+        console.log(payload.date !== variables.date)
+        if (payload.date !== variables.date) {
+          return false;
+        }
+      }
+      return true;
+    },
+  })
+  messageAdded(@Args('date') date: Date) {
+    let s = pubSub.asyncIterator('messageAdded');
+    setTimeout(async () => {
+      const missingMessages = await this.messagesService.missingMessages(date);
+      if (missingMessages.length > 0) {
+        pubSub.publish('messageAdded', { messageAdded: missingMessages, date: date });
+      }
+    })
+    return s;
   }
 
   @ResolveField(() => User)

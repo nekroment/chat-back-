@@ -4,7 +4,7 @@ import { UserEntity } from './../../entity/user.entity';
 import { MessageEntity } from './../../entity/message.entity';
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 
 
 
@@ -36,6 +36,7 @@ export class MessagesService {
     const newMessage = new MessageEntity();
     newMessage.description = description;
     newMessage.userId = id;
+    newMessage.date = new Date();
     return await newMessage.save()
   }
 
@@ -43,6 +44,10 @@ export class MessagesService {
 
     const user: User = await this.userRepository.findOne({ id });
     return user;
+  }
+
+  async missingMessages (date: Date) {
+    return await this.messageRepository.find({where: {date: MoreThan(date)}})
   }
 
 }

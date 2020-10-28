@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@beyonk/initials-avatar": "^1.1.0",
     "@nestjs/common": "^7.1.1",
     "@nestjs/core": "^7.1.1",
     "@nestjs/graphql": "^7.7.0",
@@ -29,6 +30,7 @@
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.set": "^4.3.6",
     "apollo-server-express": "^2.18.2",
+    "axios": "^0.21.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
