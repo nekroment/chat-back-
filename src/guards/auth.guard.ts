@@ -4,8 +4,8 @@ import { CanActivate, ExecutionContext, Injectable, Inject, UnauthorizedExceptio
 import { Observable } from 'rxjs';
 import { GqlExecutionContext } from '@nestjs/graphql';
 const jwt = require('jsonwebtoken');
-import * as get from 'lodash.get';
-import * as set from 'lodash.set';
+import get from 'lodash.get';
+import set from 'lodash.set';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(@Inject('UserService') private readonly userSrv: UserService) {}
