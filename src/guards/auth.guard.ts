@@ -4,6 +4,8 @@ import { CanActivate, ExecutionContext, Injectable, Inject, UnauthorizedExceptio
 import { GqlExecutionContext } from '@nestjs/graphql';
 import get from 'lodash.get';
 import set from 'lodash.set';
+import dotenv from 'dotenv';
+dotenv.config();
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -14,11 +16,11 @@ export class AuthGuard implements CanActivate {
     const ctx = GqlExecutionContext.create(context);
     const { req, connection } = ctx.getContext();
     const headers = get(req, 'headers') || get(connection, 'context', {});
-    const payload: JwtDto = await this.userSrv.validateToken(headers['access-token']);
+    const payload = await this.userSrv.validateToken(headers['access-token']);
     if (!payload) {
       throw new UnauthorizedException();
     }
-    const user = await this.userSrv.findById(payload._id);
+    const user = await this.userSrv.findById(payload['_id']);
     set(ctx.getContext(), 'req.user', user);
 
     return !!payload;

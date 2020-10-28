@@ -6,7 +6,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { GraphQLError } from 'graphql';
-import * as jwt_decode from 'jwt-decode';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
@@ -41,8 +40,8 @@ export class UserService {
     return await this.userRepository.findOne({ id });
   }
 
-  async validateToken(token: string): Promise<JwtDto> {
-    const isAuth = await jwt_decode(token);
+  async validateToken(token: string){
+    const isAuth = await jwt.decode(token);
     return isAuth
   }
 
