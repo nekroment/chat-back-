@@ -2,21 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Token {
-  token: String!
-}
-
 type User {
   id: ID!
   login: String!
   email: String!
-  token: Token!
 }
 
 type UserInfo {
-  id: ID!
-  login: String!
-  email: String!
+  user: User!
+  token: String!
 }
 
 type Message {
@@ -24,7 +18,7 @@ type Message {
   description: String!
   userId: Float!
   date: DateTime!
-  user: UserInfo!
+  user: User!
 }
 
 """
@@ -35,27 +29,12 @@ scalar DateTime
 type Query {
   getAllMessages: [Message!]!
   moreMesssages(take: Float!, skip: Float!): [Message!]!
-  signIn(user: UserLogin!): User!
-}
-
-input UserLogin {
-  email: String!
-  password: String!
+  signIn(password: String!, email: String!): UserInfo!
 }
 
 type Mutation {
-  createMessage(message: MessageInput!): Message!
-  registration(user: UserInput!): User!
-}
-
-input MessageInput {
-  description: String!
-}
-
-input UserInput {
-  login: String!
-  email: String!
-  password: String!
+  createMessage(description: String!): Message!
+  registration(email: String!, password: String!, login: String!): UserInfo!
 }
 
 type Subscription {

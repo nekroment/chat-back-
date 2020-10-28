@@ -1,5 +1,5 @@
-import { MessagesModule } from './messages/messages.module';
-import { UserModule } from './user/user.module';
+import { MessagesModule } from './modules/messages/messages.module';
+import { UserModule } from './modules/user/user.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,9 +14,6 @@ import { GraphQLModule } from '@nestjs/graphql';
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       context: (context) => {
-        // console.log('----------------------');
-        // console.log(context);
-        // console.log('++++++++++++++++++++++');
         return {req: context.req, connection: context.connection}
       },
       installSubscriptionHandlers: true

@@ -1,19 +1,18 @@
+import { UserService } from './../modules/user/user.service';
 import { JwtDto } from '../schema/dto/jwt.payload';
-import { UserService } from '../user/user.service';
 import { CanActivate, ExecutionContext, Injectable, Inject, UnauthorizedException } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { GqlExecutionContext } from '@nestjs/graphql';
-const jwt = require('jsonwebtoken');
 import * as get from 'lodash.get';
 import * as set from 'lodash.set';
+
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(@Inject('UserService') private readonly userSrv: UserService) {}
+  constructor(@Inject('UserService') private readonly userSrv: UserService) { }
   async canActivate(
     context: ExecutionContext,
   ): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
-    const {req, connection} = ctx.getContext();
+    const { req, connection } = ctx.getContext();
     const headers = get(req, 'headers') || get(connection, 'context', {});
     const payload: JwtDto = await this.userSrv.validateToken(headers['access-token']);
     if (!payload) {

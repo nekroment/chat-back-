@@ -1,5 +1,15 @@
 # Chat initiallation
 
+## Install librearies
+
+```
+npm install
+```
+
+## Create .env file
+
+Create  .env file with data from .env.example
+
 ## Database deployment
 
 Use the docker-compose.

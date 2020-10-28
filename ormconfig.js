@@ -1,11 +1,13 @@
+require('dotenv').config()
+
 const ormconfig = {
   "driver": "postgres",
   "type": "postgres",
   "port": 5432,
-  "host"   : process.env['DB_HOST'] || "localhost",
-  "username": process.env['DB_USER'] || "postgres",
-  "password": process.env['DB_PASS'] || "382001a",
-  "database":  process.env['DB_NAME'] || "chat",
+  "host"   : process.env.DB_HOST,
+  "username": process.env.DB_USER,
+  "password": process.env.DB_PASSWORD,
+  "database":  process.env.DB_NAME,
   "entities": ["dist/**/**.entity.js"],
   "migrations": [
     "src/migration/*.ts"
