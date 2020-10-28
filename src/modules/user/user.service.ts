@@ -20,8 +20,12 @@ export class UserService {
   }
 
   async registration(login: string, email: string, password: string) {
-    const isUser = await this.userRepository.findOne({ email, login })
+    const isUser = await this.userRepository.findOne({ email})
     if (isUser) {
+      return new GraphQLError('User with this email or login exist!');
+    }
+    const isLoginExist = await this.userRepository.findOne({ login})
+    if (isLoginExist) {
       return new GraphQLError('User with this email or login exist!');
     }
 
@@ -40,8 +44,8 @@ export class UserService {
     return await this.userRepository.findOne({ id });
   }
 
-  async validateToken(token: string){
-    const isAuth = await jwt.decode(token);
+  async validateToken(token: string) {
+    const isAuth = await jwt.verify(token, process.env.TOKEN_SECRET);
     return isAuth
   }
 
@@ -65,7 +69,7 @@ export class UserService {
 
   async getAccessToken(id: number) {
 
-    return await jwt.sign({ _id: id },  process.env.TOKEN_SECRET);
+    return await jwt.sign({ _id: id, exp: Math.floor(Date.now() / 1000) + Number(process.env.TOKEN_VALIDITY) }, process.env.TOKEN_SECRET);
 
   }
 
