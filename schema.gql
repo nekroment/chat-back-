@@ -35,9 +35,9 @@ type Message {
 }
 
 type Typing {
-  userId: Float
-  convId: Float
-  date: DateTime
+  user: User!
+  convId: Float!
+  date: DateTime!
 }
 
 type Query {

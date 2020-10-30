@@ -1,16 +1,17 @@
+import { User } from 'src/schema/userSchema/user.model';
 import { Field, ObjectType } from "@nestjs/graphql";
 
 
 @ObjectType()
 export class Typing{
 
-    @Field({nullable: true})
-    userId: number;
+    @Field()
+    user: User
 
-    @Field({nullable: true})
+    @Field()
     convId: number;
 
-    @Field({nullable: true})
+    @Field()
     date: Date;
 
 }

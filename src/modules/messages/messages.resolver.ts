@@ -85,10 +85,9 @@ export class MessagesResolver {
   ) {
     const user: UserEntity = context.req['user'];
     let isExist = false;
-    const userId = user.id;
     let nobodyTyping = null;
     for (let i = 0; i < isType.length; i++) {
-      if (isType[i].userId === userId && isType[i].convId === convId) {
+      if (isType[i].user.id === user.id && isType[i].convId === convId) {
         isType[i].date = new Date();
         isExist = true;
         break;
@@ -96,7 +95,7 @@ export class MessagesResolver {
     }
     if (!isExist) {
       const userTyping = {
-        userId,
+        user,
         convId,
         date: new Date()
       }
