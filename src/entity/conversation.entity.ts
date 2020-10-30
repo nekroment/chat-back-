@@ -8,6 +8,9 @@ export class ConversationEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({default: 0})
+    createdBy: number;
+
     @Column()
     name: string;
 

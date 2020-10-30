@@ -12,7 +12,7 @@ export class ConversationService {
         private conversationRepository: Repository<ConversationEntity>
     ) {}
 
-    async createConversation(name: string){
+    async createConversation(name: string, userId: number){
         const isExist = await this.conversationRepository.findOne({name});
         if (isExist) {
             return new GraphQLError('Conversation with this name exist.');
@@ -21,6 +21,7 @@ export class ConversationService {
         const newConv = new ConversationEntity();
         newConv.date = new Date();
         newConv.name = name;
+        newConv.createdBy = userId;
         return await newConv.save();
 
     }

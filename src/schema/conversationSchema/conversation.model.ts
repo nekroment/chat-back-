@@ -8,6 +8,9 @@ export class Conversation {
     id: number;
 
     @Field()
+    createdBy: number;
+
+    @Field()
     name: string;
 
     @Field()

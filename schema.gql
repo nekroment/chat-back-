@@ -16,6 +16,7 @@ type UserInfo {
 
 type Conversation {
   id: ID!
+  createdBy: Float!
   name: String!
   date: DateTime!
 }
