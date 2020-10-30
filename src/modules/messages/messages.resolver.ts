@@ -13,21 +13,39 @@ import { Typing } from 'src/schema/messageSchema/typing.model';
 const pubSub = new PubSub();
 
 const isType: Array<Typing> = [];
+let timeOut = null;
 
-function isUserTyping() {
-  const time = setInterval(() => {
+function setTimer() {
+  let minTime = 0;
+  for (let i = 0; i < isType.length; i++) {
+    const timeForTimer = Number(new Date()) - Number(isType[i].date);
+    if (timeForTimer > minTime) {
+      minTime = timeForTimer;
+    }
+  }
+  clearTimeout(timeOut);
+  timeOut = isUserTyping(4000 - minTime);
+
+}
+
+function isUserTyping(timer: number) {
+  return setTimeout(() => {
+    let convId = null;
     for (let i = 0; i < isType.length; i++) {
       const userTyping = Number(new Date()) - Number(isType[i].date);
-      if (userTyping >= 2000) {
+      if (userTyping >= timer) {
+        convId = isType[i].convId;
         isType.splice(i, 1);
-        pubSub.publish('isTyping', { isTyping: isType });
+        pubSub.publish('isTyping', { isTyping: isType, deleted: convId });
         i--;
       }
     }
     if (isType.length === 0) {
-      clearInterval(time);
+      clearTimeout(timeOut);
+    } else {
+      setTimer();
     }
-  }, 2000)
+  }, timer)
 }
 
 @Resolver(of => Message)
@@ -74,7 +92,7 @@ export class MessagesResolver {
         break;
       }
     }
-    if(!isExist) {
+    if (!isExist) {
       const userTyping = {
         userId,
         convId,
@@ -83,21 +101,41 @@ export class MessagesResolver {
       isType.push(userTyping);
       nobodyTyping = isType.length;
     }
-    pubSub.publish('isTyping', { isTyping: isType });
-    if (nobodyTyping === 1) {
-      isUserTyping();
-    }
+    pubSub.publish('isTyping', { isTyping: isType, created: convId });
+    setTimer();
     return isType;
 
   }
 
   @Subscription(() => [Typing], {
-    filter: async (payload, veriables) => {
-      return true;
+    filter: async (payload, variables) => {
+      const length = payload.isTyping.length;
+      if (payload.deleted) {
+        if (payload.deleted === variables.convId) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      if (payload.created) {
+        if (payload.created === variables.convId) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return false;
     },
     resolve: async (payload, variables) => {
-      return payload.isTyping;
-    }
+      const neededUserTyping: Array<Typing> = [];
+      for (let i = 0; i < payload.isTyping.length; i++) {
+        if (payload.isTyping[i].convId === variables.convId) {
+          neededUserTyping.push(payload.isTyping[i]);
+        }
+      }
+
+      return neededUserTyping;
+    },
   })
   async isTyping(@Args('convId') convId: number) {
     return pubSub.asyncIterator('isTyping');
