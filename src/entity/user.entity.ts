@@ -21,6 +21,8 @@ export class UserEntity extends BaseEntity{
     })
     avatar: string;
 
-    @OneToMany(() => MessageEntity, message => message.user)
+    @OneToMany(() => MessageEntity, message => message.user, {
+        onDelete: 'CASCADE'
+    })
     messages: MessageEntity[];
 }

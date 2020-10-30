@@ -14,6 +14,8 @@ export class ConversationEntity extends BaseEntity{
     @Column({default: new Date()})
     date: Date;
 
-    @OneToMany(() => MessageEntity, message => message.conversation)
+    @OneToMany(() => MessageEntity, message => message.conversation, {
+        onDelete: 'CASCADE'
+    })
     messages: MessageEntity[];
 }

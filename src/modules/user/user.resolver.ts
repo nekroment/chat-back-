@@ -53,7 +53,7 @@ export class UserResolver {
       const token = await this.userService.getAccessToken(userInfo.user.id);
       return token;
     } catch (error) {
-      console.log(error);
+      return new GraphQLError('Something wrong');
     }
   }
 }

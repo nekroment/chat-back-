@@ -68,6 +68,15 @@ export class MessagesResolver {
     return newMessage;
   }
 
+  @Mutation(() => Message)
+  async deleteMessage(
+    @Args('messageId') messageId: number,
+    @Context() context
+  ) {
+    const user: UserEntity = context.req['user'];
+    return await this.messagesService.deleteMessage(user.id, messageId);
+  }
+
   @Query(() => [Message])
   async getAllMessages(@Args("convId", { nullable: true }) convId: number) {
     return await this.messagesService.findAll(convId);

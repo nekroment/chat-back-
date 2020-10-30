@@ -20,9 +20,13 @@ export class MessageEntity extends BaseEntity{
     @Column({default: new Date()})
     date: Date;
 
-    @ManyToOne(() => UserEntity, user => user.messages)
+    @ManyToOne(() => UserEntity, user => user.messages, {
+        onDelete: 'CASCADE'
+    })
     user: UserEntity;
 
-    @ManyToOne(() => ConversationEntity, conversation => conversation.messages)
+    @ManyToOne(() => ConversationEntity, conversation => conversation.messages, {
+        onDelete: 'CASCADE'
+    })
     conversation: ConversationEntity;
 }

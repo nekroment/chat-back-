@@ -6,6 +6,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from 'typeorm';
 import { OrderedNestDataLoader } from 'nestjs-graphql-dataloader'
+import { GraphQLError } from 'graphql';
 
 
 
@@ -20,23 +21,23 @@ export class MessagesService extends OrderedNestDataLoader<User['id'], User> {
     private conversationRepository: Repository<ConversationEntity>
   ) {
     super();
-   }
+  }
 
-   protected getOptions = () => ({
-     query: (keys: Array<User['id']>) => {
-       return this.findUser(keys)
-     }
-   })
+  protected getOptions = () => ({
+    query: (keys: Array<User['id']>) => {
+      return this.findUser(keys)
+    }
+  })
 
-   async findUser(keys: number[]) {
+  async findUser(keys: number[]) {
 
-     let neededUsers = [];
-     for(let key of keys) {
-       const user = await this.userRepository.findOne({id: key});
-       neededUsers.push(user);
-     }
-     return neededUsers;
-   }
+    let neededUsers = [];
+    for (let key of keys) {
+      const user = await this.userRepository.findOne({ id: key });
+      neededUsers.push(user);
+    }
+    return neededUsers;
+  }
 
   async convExist(convId: number) {
 
@@ -45,7 +46,7 @@ export class MessagesService extends OrderedNestDataLoader<User['id'], User> {
     if (!convId) {
       return 0;
     }
-    const convExist = await this.conversationRepository.findOne({id: convId});
+    const convExist = await this.conversationRepository.findOne({ id: convId });
     if (!convExist) {
       currentConv = 0;
     } else {
@@ -59,17 +60,17 @@ export class MessagesService extends OrderedNestDataLoader<User['id'], User> {
     let skip = 0;
     const currentConv = await this.convExist(convId);
 
-    const count = await this.messageRepository.count({convId: currentConv});
+    const count = await this.messageRepository.count({ convId: currentConv });
     const isMany = count - 1500;
     if (isMany > 0) {
       skip = isMany;
     }
-    return await this.messageRepository.find({where: {convId: currentConv}, skip: skip, take: 1500 });
+    return await this.messageRepository.find({ where: { convId: currentConv }, skip: skip, take: 1500 });
   }
 
   async moreMessages(skip: number, take: number, convId: number): Promise<MessageEntity[]> {
     const currentConv = await this.convExist(convId);
-    return await this.messageRepository.find({ where: {convId: currentConv},skip, take });
+    return await this.messageRepository.find({ where: { convId: currentConv }, skip, take });
 
   }
 
@@ -77,7 +78,7 @@ export class MessagesService extends OrderedNestDataLoader<User['id'], User> {
 
     const currentConv = await this.convExist(convId);
 
-    const user = await this.userRepository.findOne({id});
+    const user = await this.userRepository.findOne({ id });
     const newMessage = new MessageEntity();
     newMessage.description = description;
     newMessage.userId = id;
@@ -87,8 +88,22 @@ export class MessagesService extends OrderedNestDataLoader<User['id'], User> {
     return await newMessage.save();
   }
 
-  async missingMessages (date: Date) {
-    return await this.messageRepository.find({where: {date: MoreThan(date)}})
+  async deleteMessage(userId: number, messageId: number) {
+    try {
+      const isExist = await this.messageRepository.findOne({ id: messageId, userId })
+      if(isExist) {
+        await this.messageRepository.delete({ id: messageId, userId });
+        return isExist;
+      } else {
+        return new GraphQLError('This message wrote another user')
+      }
+    } catch (error) {
+      return new GraphQLError('Something wrong')
+    }
+  }
+
+  async missingMessages(date: Date) {
+    return await this.messageRepository.find({ where: { date: MoreThan(date) } })
   }
 
 }
