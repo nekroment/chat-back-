@@ -24,7 +24,7 @@ function setTimer() {
     }
   }
   clearTimeout(timeOut);
-  timeOut = isUserTyping(4000 - minTime);
+  timeOut = isUserTyping(2000 - minTime);
 
 }
 
