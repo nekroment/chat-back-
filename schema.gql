@@ -44,7 +44,7 @@ type Query {
   getAllConversations: [Conversation!]!
   getAllMessages(convId: Float): [Message!]!
   moreMesssages(convId: Float, take: Float!, skip: Float!): [Message!]!
-  typingUser(convId: Float!, userId: Float!): [Typing!]!
+  typingUser(convId: Float!): [Typing!]!
   signIn(password: String!, email: String!): UserInfo!
 }
 

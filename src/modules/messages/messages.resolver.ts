@@ -80,10 +80,12 @@ export class MessagesResolver {
 
   @Query(() => [Typing])
   async typingUser(
-    @Args('userId') userId: number,
-    @Args('convId') convId: number
+    @Args('convId') convId: number,
+    @Context() context
   ) {
+    const user: UserEntity = context.req['user'];
     let isExist = false;
+    const userId = user.id;
     let nobodyTyping = null;
     for (let i = 0; i < isType.length; i++) {
       if (isType[i].userId === userId && isType[i].convId === convId) {
