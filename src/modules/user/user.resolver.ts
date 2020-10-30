@@ -1,7 +1,10 @@
+import { User } from 'src/schema/userSchema/user.model';
 import { UserInfo } from './../../schema/userSchema/user.info';
 import { UserService } from './user.service';
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
 import { GraphQLError } from 'graphql';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Resolver(of => UserInfo)
 export class UserResolver {
@@ -21,6 +24,12 @@ export class UserResolver {
     } catch (error) {
       return new GraphQLError('Wrong password or email');
     }
+  }
+
+  @Query(() => [User])
+  @UseGuards(AuthGuard)
+  async getAllUsers() {
+    return await this.userService.getAllUsers();
   }
 
   @Mutation(() => UserInfo)

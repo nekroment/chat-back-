@@ -46,6 +46,7 @@ type Query {
   moreMesssages(convId: Float, take: Float!, skip: Float!): [Message!]!
   typingUser(convId: Float!): [Typing!]!
   signIn(password: String!, email: String!): UserInfo!
+  getAllUsers: [User!]!
 }
 
 type Mutation {

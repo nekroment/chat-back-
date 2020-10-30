@@ -56,6 +56,10 @@ export class UserService {
     return await this.userRepository.findOne({ id });
   }
 
+  async getAllUsers() {
+    return await this.userRepository.find();
+  }
+
   async validateToken(token: string) {
     const isAuth = await jwt.verify(token, process.env.TOKEN_SECRET);
     return isAuth
