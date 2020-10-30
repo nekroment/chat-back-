@@ -22,7 +22,8 @@ export class ConversationResolver {
     ) {
         const user: UserEntity = context.req['user'];
         const newConv = await this.conversationService.createConversation(name, user.id);
-        pubSub.publish('conversationAdded', { conversationAdded: newConv });
+        const allConv = await this.conversationService.getAllConversation();
+        pubSub.publish('conversationAdded', { conversationAdded: allConv });
         return newConv;
     }
 
@@ -32,7 +33,10 @@ export class ConversationResolver {
         @Context() context
     ) {
         const user: UserEntity = context.req['user'];
-        return await this.conversationService.deleteConversation(user.id, convId);
+        const deletedConv = await this.conversationService.deleteConversation(user.id, convId);
+        const allConv = await this.conversationService.getAllConversation();
+        pubSub.publish('conversationAdded', { conversationAdded: allConv });
+        return deletedConv;
     }
 
     @Query(() => [Conversation])
@@ -40,7 +44,7 @@ export class ConversationResolver {
         return await this.conversationService.getAllConversation();
     }
 
-    @Subscription(() => Conversation)
+    @Subscription(() => [Conversation])
     conversationAdded() {
         return pubSub.asyncIterator('conversationAdded');
     }
