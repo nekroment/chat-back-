@@ -26,6 +26,15 @@ export class ConversationResolver {
         return newConv;
     }
 
+    @Mutation(() => Conversation)
+    async deleteConversation(
+        @Args('convId') convId: number,
+        @Context() context
+    ) {
+        const user: UserEntity = context.req['user'];
+        return await this.conversationService.deleteConversation(user.id, convId);
+    }
+
     @Query(() => [Conversation])
     async getAllConversations() {
         return await this.conversationService.getAllConversation();

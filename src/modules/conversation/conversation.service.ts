@@ -26,6 +26,16 @@ export class ConversationService {
 
     }
 
+    async deleteConversation(userId: number, convId: number) {
+        const isExist = await this.conversationRepository.findOne({id: convId, createdBy: userId})
+        if(!isExist) {
+            return new GraphQLError('Conversation created another user');
+        }
+
+        await this.conversationRepository.delete({id: convId, createdBy: userId});
+        return isExist;
+    }
+
     async getAllConversation() {
         return await this.conversationRepository.find();
     }
