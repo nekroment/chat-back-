@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { UserEntity } from './user.entity';
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
@@ -12,6 +13,12 @@ export class MessageEntity extends BaseEntity{
     @Column()
     userId: number;
 
+    @Column({default: 0})
+    convId: number;
+
     @Column({default: new Date()})
     date: Date;
+
+    @ManyToOne(() => UserEntity, user => user.messages)
+    user: UserEntity;
 }

@@ -1,3 +1,4 @@
+import { ConversationEntity } from './../../entity/conversation.entity';
 import { UserEntity } from './../../entity/user.entity';
 import { MessageEntity } from './../../entity/message.entity';
 import { MessagesService } from './messages.service';
@@ -8,7 +9,7 @@ import { MessagesResolver } from './messages.resolver';
 
 
 @Module({
-    imports: [TypeOrmModule.forFeature([MessageEntity, UserEntity]), ],
+    imports: [TypeOrmModule.forFeature([MessageEntity, UserEntity, ConversationEntity]), ],
     controllers: [],
     providers: [MessagesService, MessagesResolver, UserService],
   })

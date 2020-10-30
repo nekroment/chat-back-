@@ -1,20 +1,15 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 
+
 @ObjectType()
-export class Message{
+export class ConvoLink {
     
     @Field(type => ID)
     id: number;
-
-    @Field()
-    description: string;
 
     @Field()
     userId: number;
 
     @Field()
     convId: number;
-
-    @Field()
-    date: Date;
 }

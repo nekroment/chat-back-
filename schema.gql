@@ -14,12 +14,10 @@ type UserInfo {
   token: String!
 }
 
-type Message {
+type Conversation {
   id: ID!
-  description: String!
-  userId: Float!
+  name: String!
   date: DateTime!
-  user: User!
 }
 
 """
@@ -27,17 +25,37 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Message {
+  id: ID!
+  description: String!
+  userId: Float!
+  convId: Float!
+  date: DateTime!
+  user: User!
+}
+
+type Typing {
+  userId: Float
+  convId: Float
+  date: DateTime
+}
+
 type Query {
-  getAllMessages: [Message!]!
-  moreMesssages(take: Float!, skip: Float!): [Message!]!
+  getAllConversations: [Conversation!]!
+  getAllMessages(convId: Float): [Message!]!
+  moreMesssages(convId: Float, take: Float!, skip: Float!): [Message!]!
+  typingUser(convId: Float!, userId: Float!): [Typing!]!
   signIn(password: String!, email: String!): UserInfo!
 }
 
 type Mutation {
-  createMessage(description: String!): Message!
+  createConversation(name: String!): Conversation!
+  createMessage(convId: Float!, description: String!): Message!
   registration(email: String!, password: String!, login: String!): UserInfo!
 }
 
 type Subscription {
+  conversationAdded: Conversation!
+  isTyping(convId: Float!): [Typing!]!
   messageAdded(date: DateTime!): [Message!]!
 }
