@@ -1,3 +1,4 @@
+import { ConversationEntity } from './conversation.entity';
 import { UserEntity } from './user.entity';
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -21,4 +22,7 @@ export class MessageEntity extends BaseEntity{
 
     @ManyToOne(() => UserEntity, user => user.messages)
     user: UserEntity;
+
+    @ManyToOne(() => ConversationEntity, conversation => conversation.messages)
+    conversation: ConversationEntity;
 }
