@@ -2,7 +2,7 @@ import { User } from './../../schema/userSchema/user.model';
 import { UserEntity } from './../../entity/user.entity';
 import { Message } from './../../schema/messageSchema/messages.model';
 import { MessagesService } from './messages.service';
-import { Resolver, Query, Mutation, Context, Args, ResolveField, Parent, Subscription } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Context, Args, ResolveField, Parent, Subscription, Int } from "@nestjs/graphql";
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { PubSub } from "graphql-subscriptions";
@@ -58,7 +58,7 @@ export class MessagesResolver {
   @Mutation(() => Message)
   async createMessage(
     @Args('description') description: string,
-    @Args({name: 'convId', nullable: true}) convId: number,
+    @Args({name: 'convId', nullable: true , type: () => Int}) convId: number,
     @Context() context
   ) {
     const user: UserEntity = context.req['user'];
@@ -69,7 +69,7 @@ export class MessagesResolver {
 
   @Mutation(() => Message)
   async deleteMessage(
-    @Args('messageId') messageId: number,
+    @Args('messageId', {type: () => Int}) messageId: number,
     @Context() context
   ) {
     const user: UserEntity = context.req['user'];
@@ -77,18 +77,18 @@ export class MessagesResolver {
   }
 
   @Query(() => [Message])
-  async getAllMessages(@Args("convId", { nullable: true }) convId: number) {
+  async getAllMessages(@Args("convId", { nullable: true, type: () => Int }) convId: number) {
     return await this.messagesService.findAll(convId);
   }
 
   @Query(() => [Message])
-  async moreMesssages(@Args('skip') skip: number, @Args('take') take: number, @Args('convId', { nullable: true }) convId: number) {
+  async moreMesssages(@Args('skip') skip: number, @Args('take') take: number, @Args('convId', { nullable: true, type: () => Int }) convId: number) {
     return await this.messagesService.moreMessages(skip, take, convId);
   }
 
   @Query(() => [Typing])
   async typingUser(
-    @Args('convId') convId: number,
+    @Args('convId', {type: () => Int}) convId: number,
     @Context() context
   ) {
     const user: UserEntity = context.req['user'];

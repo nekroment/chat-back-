@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class Message{
@@ -9,10 +9,10 @@ export class Message{
     @Field()
     description: string;
 
-    @Field()
+    @Field(type => Int)
     userId: number;
 
-    @Field()
+    @Field(type => Int)
     convId: number;
 
     @Field()

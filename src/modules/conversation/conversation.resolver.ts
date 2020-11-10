@@ -2,7 +2,7 @@ import { UserEntity } from './../../entity/user.entity';
 import { Conversation } from './../../schema/conversationSchema/conversation.model';
 import { ConversationService } from './conversation.service';
 import { UseGuards } from "@nestjs/common";
-import { Args, Context, Mutation, Query, Resolver, Subscription } from "@nestjs/graphql";
+import { Args, Context, Int, Mutation, Query, Resolver, Subscription } from "@nestjs/graphql";
 import { AuthGuard } from "src/guards/auth.guard";
 import { PubSub } from "graphql-subscriptions";
 

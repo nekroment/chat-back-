@@ -29,8 +29,8 @@ scalar DateTime
 type Message {
   id: ID!
   description: String!
-  userId: Float!
-  convId: Float!
+  userId: Int!
+  convId: Int!
   date: DateTime!
   user: User!
 }
@@ -43,9 +43,9 @@ type Typing {
 
 type Query {
   getAllConversations: [Conversation!]!
-  getAllMessages(convId: Float): [Message!]!
-  moreMesssages(convId: Float, take: Float!, skip: Float!): [Message!]!
-  typingUser(convId: Float!): [Typing!]!
+  getAllMessages(convId: Int): [Message!]!
+  moreMesssages(convId: Int, take: Float!, skip: Float!): [Message!]!
+  typingUser(convId: Int!): [Typing!]!
   signIn(password: String!, email: String!): UserInfo!
   getAllUsers: [User!]!
 }
@@ -53,8 +53,8 @@ type Query {
 type Mutation {
   createConversation(name: String!): Conversation!
   deleteConversation(convId: Float!): Conversation!
-  createMessage(convId: Float, description: String!): Message!
-  deleteMessage(messageId: Float!): Message!
+  createMessage(convId: Int, description: String!): Message!
+  deleteMessage(messageId: Int!): Message!
   registration(email: String!, password: String!, login: String!): UserInfo!
 }
 
