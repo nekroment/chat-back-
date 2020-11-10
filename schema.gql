@@ -52,13 +52,14 @@ type Query {
 
 type Mutation {
   createConversation(name: String!): Conversation!
-  createMessage(convId: Float!, description: String!): Message!
+  deleteConversation(convId: Float!): Conversation!
+  createMessage(convId: Float, description: String!): Message!
   deleteMessage(messageId: Float!): Message!
   registration(email: String!, password: String!, login: String!): UserInfo!
 }
 
 type Subscription {
-  conversationAdded: Conversation!
+  conversationAdded: [Conversation!]!
   isTyping(convId: Float!): [Typing!]!
   messageAdded(date: DateTime!): [Message!]!
 }

@@ -58,10 +58,9 @@ export class MessagesResolver {
   @Mutation(() => Message)
   async createMessage(
     @Args('description') description: string,
-    @Args('convId') convId: number,
+    @Args({name: 'convId', nullable: true}) convId: number,
     @Context() context
   ) {
-
     const user: UserEntity = context.req['user'];
     const newMessage = await this.messagesService.createMessage(description, user.id, convId);
     pubSub.publish('messageAdded', { messageAdded: [newMessage] });
